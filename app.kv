@@ -1,0 +1,82 @@
+# TODO: Create your Kivy layout in the kv language here
+BoxLayout:
+    id: main_box
+    orientation: 'horizontal'
+    Popup:
+        id:popup
+        title:"Message"
+        title_align: "center"
+        size_hint: 0.6, 0.3
+        on_parent:
+            if self.parent == main_box: self.parent.remove_widget(self)
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                id: popup_message
+                size_hint_y: 1.5
+            Button:
+                size_hint_y: 0.75
+                text: 'OK'
+                on_press: app.handle_close_popup()
+    BoxLayout:
+        size_hint_x: 0.25
+        orientation: 'vertical'
+        Label:
+            text: 'Sort by:'
+        Spinner:
+            # Spinner list
+            text: app.sort
+            # Default value
+            values: app.category
+            on_text: app.sort_song(self.text)
+        Label:
+            text: 'Add New Songs:'
+        Label:
+            text: 'Title'
+        TextInput:
+            id: title
+        Label:
+            text: 'Artist'
+        TextInput:
+            id: artist
+        Label:
+            text: 'Year'
+        TextInput:
+            id: year
+        Button:
+            text: 'Add song'
+            on_press: app.handle_add_song(title.text, year.text, artist.text)
+        Button
+            text: 'Clear'
+            on_press: app.handle_clear_button()
+
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            id: learn_count
+        Spinner:
+            text: app.current_order
+            values: app.order
+            on_text: app.handle_order(self.text)
+        ScrollView:
+            id: scroll_song
+            do_scroll_x: False
+            do_scroll_y: True
+            size_hint_y: 7
+            BoxLayout:
+                id: song_list
+                orientation: "vertical"
+                size_hint_y: None
+                padding: 0, 40, 0, 0
+
+
+        Label:
+            id: message
+            text: ''
+            color: 31, 58, 147, 1
+
+
+<TextInput>
+    text_size: self.size
+    multiline: False
+    write_tab: False
